@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia ODS 11 - Cidades Sustentáveis</title>
+    <style>
+        :root {
+            --primary: #2e7d32;
+            --primary-light: #4caf50;
+            --background: #f1f8e9;
+            --text: #263238;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 2rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-weight: 300;
+            opacity: 0.9;
+        }
+
+        main {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .navigation-tools {
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: flex-start;
+        }
+
+        button {
+            background-color: var(--primary);
+            color: var(--white);
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+            font-weight: bold;
+        }
+
+        button:disabled {
+            background-color: #b0bec5;
+            cursor: not-allowed;
+        }
+
+        button:hover:not(:disabled) {
+            background-color: var(--primary-light);
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .menu-card, .content-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .menu-card h2, .content-card h2 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--background);
+            padding-bottom: 0.5rem;
+        }
+
+        .menu-list {
+            list-style: none;
+        }
+
+        .menu-item {
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            background-color: var(--background);
+            border-left: 4px solid var(--primary);
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 600;
+        }
+
+        .menu-item:hover {
+            background-color: #dcedc8;
+            transform: translateX(5px);
+        }
+
+        .content-body {
+            margin-top: 1rem;
+        }
+
+        .tag-ods {
+            display: inline-block;
+            background-color: #e8112d;
+            color: white;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+            color: #78909c;
+            font-size: 0.85rem;
+            border-top: 1px solid #cfd8dc;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Guia Educativo: Cidades Sustentáveis</h1>
+        <p>Desenvolvimento de Ferramentas Tecnológicas para o ODS 11</p>
+    </header>
+
+    <main>
+        <div class="navigation-tools">
+            <button id="btnVoltar" onclick="voltarConteudo()" disabled>← Voltar ao Conteúdo Anterior (Pilha)</button>
+        </div>
+
+        <div class="grid-container">
+            <section class="menu-card">
+                <h2>Módulos do Guia</h2>
+                <ul class="menu-list" id="menuModulos">
+                    </ul>
+            </section>
+
+            <section class="content-card" id="painelConteudo">
+                <span class="tag-ods">ODS 11</span>
+                <h2 id="tituloConteudo">Selecione um módulo</h2>
+                <div class="content-body" id="corpoConteudo">
+                    <p>Clique em um dos tópicos do menu lateral para explorar as soluções tecnológicas e conceitos de sustentabilidade urbana baseados em IoT, análise de dados e aplicações web.</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <p>Projeto Desenvolvido por Natan Marques da Silva (RA: 26001519-2) & Bruno de Carvalho Ribeiro (RA: 25364451-2)</p>
+        <p>Engenharia de Software - UniCesumar - 2026</p>
+    </footer>
+
+    <script>
+        // ==========================================
+        // 1. MODELAGEM ORIENTADA A OBJETOS (OO)
+        // ==========================================
+        class ConteudoSustentavel {
+            constructor(id, titulo, texto) {
+                this.id = id;
+                this.titulo = titulo;
+                this.texto = texto;
+            }
+        }
+
+        class GerenciadorConteudo {
+            constructor() {
+                this.modulos = [];
+                this.historicoNavegacao = []; // ESTRUTURA DE DADOS: PILHA
+                this.conteudoAtual = null;
+            }
+
+            adicionarModulo(modulo) {
+                this.modulos.push(modulo);
+            }
+
+            navegarPara(id) {
+                const proximo = this.modulos.find(m => m.id === id);
+                if (!proximo) return;
+
+                if (this.conteudoAtual) {
+                    this.historicoNavegacao.push(this.conteudoAtual); // Push na Pilha
+                }
+
+                this.conteudoAtual = proximo;
+                this.renderizarConteudoAtual();
+                this.atualizarBotaoVoltar();
+            }
+
+            voltar() {
+                if (this.historicoNavegacao.length > 0) {
+                    this.conteudoAtual = this.historicoNavegacao.pop(); // Pop na Pilha
+                    this.renderizarConteudoAtual();
+                    this.atualizarBotaoVoltar();
+                }
+            }
+
+            renderizarMenu() {
+                const menuEl = document.getElementById('menuModulos');
+                menuEl.innerHTML = '';
+                this.modulos.forEach(mod => {
+                    const li = document.createElement('li');
+                    li.className = 'menu-item';
+                    li.innerText = mod.titulo;
+                    li.onclick = () => this.navegarPara(mod.id);
+                    menuEl.appendChild(li);
+                });
+            }
+
+            renderizarConteudoAtual() {
+                if (!this.conteudoAtual) return;
+                document.getElementById('tituloConteudo').innerText = this.conteudoAtual.titulo;
+                document.getElementById('corpoConteudo').innerHTML = `<p>${this.conteudoAtual.texto}</p>`;
+            }
+
+            atualizarBotaoVoltar() {
+                const btn = document.getElementById('btnVoltar');
+                btn.disabled = this.historicoNavegacao.length === 0;
+            }
+        }
+
+        // ==========================================
+        // 2. EXECUÇÃO IMEDIATA (Sem travar no onload)
+        // ==========================================
+        const sistema = new GerenciadorConteudo();
+
+        sistema.adicionarModulo(new ConteudoSustentavel(
+            1, 
+            "Introdução à Sustentabilidade Urbana", 
+            "O crescimento rápido das cidades trouxe problemas sérios como poluição, descarte irregular de resíduos e alto consumo energético. O ODS 11 visa reverter esse cenário, tornando centros urbanos inclusivos, seguros e resilientes através da tecnologia."
+        ));
+
+        sistema.adicionarModulo(new ConteudoSustentavel(
+            2, 
+            "Internet das Coisas (IoT) em Cidades Inteligentes", 
+            "Sensores inteligentes espalhados pelas cidades coletam dados em tempo real sobre qualidade do ar, tráfego e níveis de lixeiras públicas. Engenheiros de software criam sistemas que interpretam esses dados para automatizar rotas de coleta e semáforos."
+        ));
+
+        sistema.adicionarModulo(new ConteudoSustentavel(
+            3, 
+            "Análise de Dados e Tomada de Decisão", 
+            "Com ferramentas analíticas, governos e cidadãos conseguem identificar padrões de desperdício energético e pontos críticos de alagamentos. Isso promove uma tomada de decisão muito mais eficiente, barata e limpa."
+        ));
+
+        sistema.adicionarModulo(new ConteudoSustentavel(
+            4, 
+            "Aplicações Web como Ferramentas Educativas", 
+            "O uso de portais interativos e guias práticos capacita estudantes e desenvolvedores a pensarem em soluções inovadoras diretamente do navegador, estendendo o impacto acadêmico para o mundo corporativo e social."
+        ));
+
+        // Força a renderização imediata do menu na tela
+        sistema.renderizarMenu();
+
+        // Funções de clique dos botões
+        function voltarConteudo() {
+            sistema.voltar();
+        }
+    </script>
+</body>
+</html>
